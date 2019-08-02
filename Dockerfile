@@ -7,8 +7,6 @@ ENV PRESTO_VAR_DIR=/var/presto \
     PRESTO_ETC_DIR=/etc/presto
 
 RUN yum install -y \
-        python \
-        zip \
         java-1.8.0-openjdk \
         "${PRESTO_BASE_URL}/${PRESTO_VERSION}/presto-server-rpm-${PRESTO_VERSION}.rpm" \
  && yum clean all \
