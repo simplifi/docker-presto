@@ -18,8 +18,7 @@ RUN yum install -y \
  && rm ${PRESTO_ETC_DIR}/config.properties \
  && rm ${PRESTO_ETC_DIR}/node.properties
 
-COPY ./scripts/entrypoint.sh /usr/local/bin/
-COPY ./scripts/start_presto.sh /usr/local/bin/
+COPY ./scripts/entrypoint.sh ./scripts/start_presto.sh /usr/local/bin/
 
 EXPOSE 8080
 
