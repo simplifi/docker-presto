@@ -7,7 +7,7 @@ before_script:
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
 
 script:
-  - docker build --build-arg PRESTO_VERSION=${VERSION} -f Dockerfile -t "${IMAGE}" .
+  - docker build -f Dockerfile -t "${IMAGE}" .
   - docker run ${IMAGE} /usr/lib/presto/bin/launcher --help
 
 # Deploy to Docker Hub (only for tags on master)
