@@ -1,6 +1,11 @@
 # docker-presto
 
-This repository contains **Dockerfile** of [Presto](https://prestosql.io/).
+[![Build Status](https://travis-ci.com/simplifi/docker-presto.svg?branch=master)](https://travis-ci.com/simplifi/docker-presto)
+[![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/simplifi/docker-presto/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/simplifi/docker-presto.svg)](https://hub.docker.com/r/simplifi/docker-presto/)
+[![Docker Stars](https://img.shields.io/docker/stars/simplifi/docker-presto.svg)](https://hub.docker.com/r/simplifi/docker-presto/)
+
+This repository contains a **Dockerfile** of [Presto](https://prestosql.io/).
 
 ## Installation
 
