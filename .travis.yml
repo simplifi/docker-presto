@@ -3,22 +3,26 @@ sudo: 'required'
 services:
   - 'docker'
 
-env:
-  - VERSION=316 LATEST=
-  - VERSION=317 LATEST=true
-
 before_script:
-  - export IMAGE="simplifi/docker-presto:${VERSION}"
-  - if [[ "${LATEST}" == "true" ]]; then
-      export IMAGE="simplifi/docker-presto:latest" ;
-    fi
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
 
 script:
   - docker build --build-arg PRESTO_VERSION=${VERSION} -f Dockerfile -t "${IMAGE}" .
   - docker run ${IMAGE} /usr/lib/presto/bin/launcher --help
 
-after_success:
-  - if [[ "${TRAVIS_BRANCH}" == "master" ]]; then
-      docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
-      docker push ${IMAGE} ;
-    fi
+# Deploy to Docker Hub (only for tags on master)
+deploy:
+  # Pushes the latest tag for master branch
+  - provider: script
+    script: bash docker push simplifi/docker-presto:latest ;
+    on:
+      tags: false
+      branch: master
+      repo: simplifi/docker-presto
+  # Pushes the versioned tag for a tag
+  - provider: script
+    script: bash docker push simplifi/docker-presto:${TRAVIS_TAG} ;
+    on:
+      tags: true
+      branch: master
+      repo: simplifi/docker-presto
