@@ -14,10 +14,10 @@ before_script:
 
 script:
   - docker build --build-arg PRESTO_VERSION=${VERSION} -t simplifi/docker-presto .
-  - docker tag simplifi/docker-presto:${VERSION}
-  - if [ -n "${ISLATEST:+1}" ]; then
-      docker tag simplifi/docker-presto:latest;
-    fi
+  - docker tag simplifi/docker-presto simplifi/docker-presto:${VERSION}
+#  - if [ -n "${ISLATEST:+1}" ]; then
+#      docker tag simplifi/docker-presto simplifi/docker-presto:latest;
+#    fi
   - docker run simplifi/docker-presto:${VERSION} /usr/lib/presto/bin/launcher --help
 
 after_script:
