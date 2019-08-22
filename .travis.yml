@@ -1,0 +1,24 @@
+sudo: 'required'
+
+services:
+  - 'docker'
+
+env:
+  - VERSION=316 LATEST=
+  - VERSION=317 LATEST=true
+
+before_script:
+  - export IMAGE="simplifi/docker-presto:${VERSION}"
+  - if [[ "${LATEST}" == "true" ]]; then
+      export IMAGE="simplifi/docker-presto:latest" ;
+    fi
+
+script:
+  - docker build --build-arg PRESTO_VERSION=${VERSION} -f Dockerfile -t "${IMAGE}" .
+  - docker run ${IMAGE} /usr/lib/presto/bin/launcher --help
+
+after_success:
+  - if [[ "${TRAVIS_BRANCH}" == "master" ]]; then
+      docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
+      docker push ${IMAGE} ;
+    fi
