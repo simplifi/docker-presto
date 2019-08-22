@@ -1,29 +1,44 @@
-sudo: 'required'
+sudo: required
+
+language: minimal
 
 services:
-  - 'docker'
+  - docker
+
+env:
+  - VERSION=316
+  - VERSION=317 ISLATEST=1
+
+before_script:
+  - env | sort
 
 script:
-  - docker build -f Dockerfile -t simplifi/docker-presto:latest .
-  - docker build -f Dockerfile -t simplifi/docker-presto:${TRAVIS_TAG} .
-  - docker run simplifi/docker-presto:latest /usr/lib/presto/bin/launcher --help
+  - docker build --build-arg PRESTO_VERSION=${VERSION} -t simplifi/docker-presto .
+  - docker tag simplifi/docker-presto:${VERSION}
+  - if [ -n "${ISLATEST:+1}" ]; then
+      docker tag simplifi/docker-presto:latest;
+    fi
+  - docker run simplifi/docker-presto:${VERSION} /usr/lib/presto/bin/launcher --help
+
+after_script:
+  - docker images
 
 before_deploy:
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
 
-# Deploy to Docker Hub (only for tags on master)
+# Deploy to Docker Hub
 deploy:
-  # Pushes the latest tag for master branch
+  # Always push the versioned tag
+  - provider: script
+    script: bash docker push simplifi/docker-presto:${VERSION} ;
+    on:
+      branch: master
+      repo: simplifi/docker-presto
+
+  # Only push the latest tag if this is the latest version
   - provider: script
     script: bash docker push simplifi/docker-presto:latest ;
     on:
-      tags: false
       branch: master
       repo: simplifi/docker-presto
-  # Pushes the versioned tag for a tag
-  - provider: script
-    script: bash docker push simplifi/docker-presto:${TRAVIS_TAG} ;
-    on:
-      tags: true
-      branch: master
-      repo: simplifi/docker-presto
+      condition: $ISLATEST = 1
