@@ -3,12 +3,13 @@ sudo: 'required'
 services:
   - 'docker'
 
-before_script:
-  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
-
 script:
-  - docker build -f Dockerfile -t "${IMAGE}" .
-  - docker run ${IMAGE} /usr/lib/presto/bin/launcher --help
+  - docker build -f Dockerfile -t simplifi/docker-presto:latest .
+  - docker build -f Dockerfile -t simplifi/docker-presto:${TRAVIS_TAG} .
+  - docker run simplifi/docker-presto:latest /usr/lib/presto/bin/launcher --help
+
+before_deploy:
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
 
 # Deploy to Docker Hub (only for tags on master)
 deploy:
