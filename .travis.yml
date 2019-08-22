@@ -1,24 +1,13 @@
-sudo: required
-
 language: minimal
-
-services:
-  - docker
 
 env:
   - VERSION=316
   - VERSION=317 ISLATEST=1
 
-before_script:
-  - env | sort
-
 script:
   - docker build --build-arg PRESTO_VERSION=${VERSION} -t simplifi/docker-presto .
   - docker tag simplifi/docker-presto simplifi/docker-presto:${VERSION}
   - docker run simplifi/docker-presto:${VERSION} /usr/lib/presto/bin/launcher --help
-
-after_script:
-  - docker images
 
 before_deploy:
   - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
