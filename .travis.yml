@@ -4,13 +4,10 @@ env:
   - VERSION=316
   - VERSION=317 ISLATEST=1
 
-before_script:
-  - export REPO=simplifi/docker-presto
-
 script:
   - docker build --build-arg PRESTO_VERSION=${VERSION} -t simplifi/docker-presto .
-  - docker tag ${REPO} ${REPO}:${VERSION}
-  - docker run ${REPO}:${VERSION} /usr/lib/presto/bin/launcher --help
+  - docker tag simplifi/docker-presto simplifi/docker-presto:${VERSION}
+  - docker run simplifi/docker-presto:${VERSION} /usr/lib/presto/bin/launcher --help
 
 # Deploy to Docker Hub
 deploy:
@@ -25,6 +22,6 @@ deploy:
   - provider: script
     script: bash ./.travis/docker_push latest
     on:
-#      branch: master
+      branch: master
       repo: simplifi/docker-presto
       condition: $ISLATEST = 1
