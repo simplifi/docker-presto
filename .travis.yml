@@ -1,0 +1,30 @@
+language: minimal
+
+env:
+  - VERSION=316
+  - VERSION=317 ISLATEST=1
+
+script:
+  - docker build --build-arg PRESTO_VERSION=${VERSION} -t simplifi/docker-presto .
+  - docker tag simplifi/docker-presto simplifi/docker-presto:${VERSION}
+  - docker run simplifi/docker-presto:${VERSION} /usr/lib/presto/bin/launcher --help
+
+before_deploy:
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} ;
+
+# Deploy to Docker Hub
+deploy:
+  # Always push the versioned tag
+  - provider: script
+    script: bash docker push simplifi/docker-presto:${VERSION} ;
+    on:
+      branch: master
+      repo: simplifi/docker-presto
+
+  # Only push the latest tag if this is the latest version
+  - provider: script
+    script: bash docker push simplifi/docker-presto:latest ;
+    on:
+      branch: master
+      repo: simplifi/docker-presto
+      condition: $ISLATEST = 1

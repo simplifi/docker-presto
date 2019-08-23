@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG PRESTO_VERSION=316
+ARG PRESTO_VERSION=317
 ARG PRESTO_BASE_URL=https://repo1.maven.org/maven2/io/prestosql/presto-server-rpm
 
 ENV PRESTO_VAR_DIR=/var/presto \
