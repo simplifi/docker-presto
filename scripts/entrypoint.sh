@@ -5,9 +5,6 @@ set -e
 #############################
 # Default Values
 
-# jvm
-: "${PRESTO_JVM_XMX_GB:=16}"
-
 # node
 : "${PRESTO_NODE_ENVIRONMENT:=docker}"
 : "${PRESTO_NODE_ID:=$(uuidgen)}"
@@ -39,25 +36,6 @@ set -e
 : "${PRESTO_CATALOG_HIVE_S3_ENDPOINT:=}"
 : "${PRESTO_CATALOG_HIVE_S3_USE_INSTANCE_CREDENTIALS:=false}"
 : "${PRESTO_CATALOG_HIVE_S3_SELECT_PUSHDOWN_ENABLED:=true}"
-
-
-#############################
-# jvm.config
-
-{   
-    echo "-server"
-    echo "-Xmx${PRESTO_JVM_XMX_GB}"
-    echo "-XX:-UseBiasedLocking"
-    echo "-XX:+UseG1GC"
-    echo "-XX:G1HeapRegionSize=32M"
-    echo "-XX:+ExplicitGCInvokesConcurrent"
-    echo "-XX:+ExitOnOutOfMemoryError"
-    echo "-XX:+UseGCOverheadLimit"
-    echo "-XX:+HeapDumpOnOutOfMemoryError"
-    echo "-XX:ReservedCodeCacheSize=512M"
-    echo "-Djdk.attach.allowAttachSelf=true"
-    echo "-Djdk.nio.maxCachedBufferSize=2000000"
-} > /etc/presto/jvm.config
 
 
 #############################

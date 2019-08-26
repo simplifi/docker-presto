@@ -31,12 +31,6 @@ docker run -p 8080:8080 simplifi/docker-presto:latest
 
 Configuration is handled by setting the environment variables outlined below.
 
-### jvm.config
-
-| Property         | Environment Variable    | Default Value                 | Description                                                    |
-| -----------------| ----------------------- | ----------------------------- | -------------------------------------------------------------- |
-| Xmx              | PRESTO_JVM_XMX_GB       | 16                            | the maximum size, in gigabytes, of the memory allocation pool. |
-
 
 ### node.properties
 
