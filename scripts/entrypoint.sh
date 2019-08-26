@@ -54,13 +54,18 @@ set -e
 
 {
     echo "coordinator=${PRESTO_CONF_COORDINATOR}"
-    echo "node-scheduler.include-coordinator=${PRESTO_CONF_INCLUDE_COORDINATOR}"
     echo "http-server.http.port=${PRESTO_CONF_HTTP_PORT}"
-    echo "discovery-server.enabled=${PRESTO_CONF_DISCOVERY_SERVER_ENABLED}"
     echo "discovery.uri=${PRESTO_CONF_DISCOVERY_URI}"
     echo "query.max-memory=${PRESTO_CONF_QUERY_MAX_MEMORY}"
     echo "query.max-memory-per-node=${PRESTO_CONF_QUERY_MAX_MEMORY_PER_NODE}"
     echo "query.max-total-memory-per-node=${PRESTO_CONF_QUERY_MAX_TOTAL_MEMORY_PER_NODE}"
+    
+    # Only write out coordinator specific configs if this is a coordinator
+    if [ $PRESTO_CONF_COORDINATOR == "true" ]; then
+        echo "discovery-server.enabled=${PRESTO_CONF_DISCOVERY_SERVER_ENABLED}"
+        echo "node-scheduler.include-coordinator=${PRESTO_CONF_INCLUDE_COORDINATOR}"
+    fi
+
 } > /etc/presto/config.properties
 
 
